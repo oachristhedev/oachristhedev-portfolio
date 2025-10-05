@@ -144,7 +144,7 @@
                 action="/thank-you"
                 data-netlify="true"
                 netlify-honeypot="bot-field"
-                class="contact-form php-email-form"
+                class="contact-form"
                 data-aos="fade-up"
                 data-aos-delay="200"
               >
@@ -154,13 +154,15 @@
                   to you as soon as possible.
                 </p>
 
-                <!-- Hidden Netlify identifiers -->
+                <!-- Hidden Netlify form identifier -->
                 <input type="hidden" name="form-name" value="contact" />
+
+                <!-- Honeypot field (anti-bot) -->
                 <p style="display: none">
                   <label
                     >Don’t fill this out if you're human:
-                    <input name="bot-field"
-                  /></label>
+                    <input name="bot-field" />
+                  </label>
                 </p>
 
                 <div class="row gy-4">
@@ -188,7 +190,7 @@
                     <input
                       type="text"
                       class="form-control"
-                      name="subject"
+                      name=formject"
                       placeholder="Subject"
                       required
                     />
@@ -205,9 +207,9 @@
                   </div>
 
                   <div class="col-12 text-center">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">
+                    <div class="loading" style="display: none">Loading</div>
+                    <div class="error-message" style="display: none"></div>
+                    <div class="sent-message" style="display: none">
                       Your message has been sent. Thank you!
                     </div>
 
