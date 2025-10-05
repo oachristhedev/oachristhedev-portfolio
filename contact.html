@@ -139,9 +139,13 @@
 
             <div class="col-lg-7">
               <form
-                class="contact-form"
+                name="contact"
+                method="POST"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+                class="php-email-form"
                 data-aos="fade-up"
-                data-aos-delay="300"
+                data-aos-delay="200"
               >
                 <h3>Get In Touch</h3>
                 <p>
@@ -149,77 +153,68 @@
                   to you as soon as possible.
                 </p>
 
-                <div
-                  name="contact"
-                  action="forms/contact.php"
-                  method="POST"
-                  data-netlify="true"
-                  netlify-honeypot="bot-field"
-                  class="php-email-form"
-                  data-aos="fade-up"
-                  data-aos-delay="200"
-                >
-                  <!-- Hidden Netlify identifiers -->
-                  <input type="hidden" name="form-name" value="contact" />
-                  <p style="display: none">
-                    <label
-                      >Don’t fill this out if you're human:
-                      <input name="bot-field"
-                    /></label>
-                  </p>
+                <!-- Hidden Netlify form identifier -->
+                <input type="hidden" name="form-name" value="contact" />
 
-                  <div class="row gy-4">
-                    <div class="col-md-6">
-                      <input
-                        type="text"
-                        name="name"
-                        class="form-control"
-                        placeholder="Your Name"
-                        required
-                      />
+                <!-- Honeypot field (anti-bot) -->
+                <p style="display: none">
+                  <label
+                    >Don’t fill this out if you're human:
+                    <input name="bot-field" />
+                  </label>
+                </p>
+
+                <div class="row gy-4">
+                  <div class="col-md-6">
+                    <input
+                      type="text"
+                      name="name"
+                      class="form-control"
+                      placeholder="Your Name"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-md-6">
+                    <input
+                      type="email"
+                      class="form-control"
+                      name="email"
+                      placeholder="Your Email"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="subject"
+                      placeholder="Subject"
+                      required
+                    />
+                  </div>
+
+                  <div class="col-12">
+                    <textarea
+                      class="form-control"
+                      name="message"
+                      rows="6"
+                      placeholder="Message"
+                      required
+                    ></textarea>
+                  </div>
+
+                  <div class="col-12 text-center">
+                    <div class="loading" style="display: none">Loading</div>
+                    <div class="error-message" style="display: none"></div>
+                    <div class="sent-message" style="display: none">
+                      Your message has been sent. Thank you!
                     </div>
 
-                    <div class="col-md-6">
-                      <input
-                        type="email"
-                        class="form-control"
-                        name="email"
-                        placeholder="Your Email"
-                        required
-                      />
-                    </div>
-
-                    <div class="col-12">
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="subject"
-                        placeholder="Subject"
-                        required
-                      />
-                    </div>
-
-                    <div class="col-12">
-                      <textarea
-                        class="form-control"
-                        name="message"
-                        rows="6"
-                        placeholder="Message"
-                        required
-                      ></textarea>
-                    </div>
-
-                    <div class="col-12 text-center">
-                      <div class="loading">Loading</div>
-                      <div class="error-message"></div>
-                      <div class="sent-message">
-                        Your message has been sent. Thank you!
-                      </div>
-
-                      <button type="submit" class="btn bg-custom">
-                        Send Message
-                      </button>
-                    </div>
+                    <button type="submit" class="btn bg-custom">
+                      Send Message
+                    </button>
                   </div>
                 </div>
               </form>
@@ -282,41 +277,53 @@
     <!-- Main JS File -->
     <script src="assets/js/main.js">
 
-      document.addEventListener("DOMContentLoaded", function () {
-          const form = document.querySelector(".php-email-form");
-          const loading = document.querySelector(".loading");
-          const sentMessage = document.querySelector(".sent-message");
-          const errorMessage = document.querySelector(".error-message");
+          document.addEventListener("DOMContentLoaded", function () {
+              const form = document.querySelector(".php-email-form");
+              const loading = document.querySelector(".loading");
+              const sentMessage = document.querySelector(".sent-message");
+              const errorMessage = document.querySelector(".error-message");
 
-          form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            loading.style.display = "block";
-            sentMessage.style.display = "none";
-            errorMessage.style.display = "none";
+              form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                loading.style.display = "block";
+                sentMessage.style.display = "none";
+                errorMessage.style.display = "none";
 
-            const formData = new FormData(form);
+                const formData = new FormData(form);
 
-            fetch("/", {
-              method: "POST",
-              body: formData,
-            })
-              .then((response) => {
-                loading.style.display = "none";
-                if (response.ok) {
-                  sentMessage.style.display = "block";
-                  form.reset();
-                } else {
-                  errorMessage.style.display = "block";
-                  errorMessage.textContent = "Submission failed. Please try again.";
-                }
-              })
-              .catch(() => {
-                loading.style.display = "none";
-                errorMessage.style.display = "block";
-                errorMessage.textContent = "Network error. Please try again later.";
+                fetch("/", {
+                  method: "POST",
+                  body: formData,
+                })
+                  .then((response) => {
+                    loading.style.display = "none";
+                    if (response.ok) {
+                      sentMessage.style.display = "block";
+                      form.reset();
+                    } else {
+                      errorMessage.style.display = "block";
+                      errorMessage.textContent = "Submission failed. Please try again.";
+                    }
+                  })
+                  .catch(() => {
+                    loading.style.display = "none";
+                    errorMessage.style.display = "block";
+                    errorMessage.textContent = "Network error. Please try again later.";
+                  });
               });
-          });
-        });
+            });
+
+      const form = document.querySelector(".php-email-form");
+      form.addEventListener("submit", function (e) {
+        const loading = form.querySelector(".loading");
+        const sentMessage = form.querySelector(".sent-message");
+        loading.style.display = "block";
+        setTimeout(() => {
+          loading.style.display = "none";
+          sentMessage.style.display = "block";
+          form.reset();
+        }, 1500);
+      });
     </script>
   </body>
 </html>
