@@ -282,45 +282,40 @@
     <script src="assets/js/main.js">
 
       document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector(".php-email-form");
-        const loading = document.querySelector(".loading");
-        const sentMessage = document.querySelector(".sent-message");
-        const errorMessage = document.querySelector(".error-message");
+          const form = document.querySelector(".php-email-form");
+          const loading = document.querySelector(".loading");
+          const sentMessage = document.querySelector(".sent-message");
+          const errorMessage = document.querySelector(".error-message");
 
-        // Hide all feedback elements by default
-        loading.style.display = "none";
-        sentMessage.style.display = "none";
-        errorMessage.style.display = "none";
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            loading.style.display = "block";
+            sentMessage.style.display = "none";
+            errorMessage.style.display = "none";
 
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
-          loading.style.display = "block";
-          sentMessage.style.display = "none";
-          errorMessage.style.display = "none";
+            const formData = new FormData(form);
 
-          const formData = new FormData(form);
-
-          fetch("/", {
-            method: "POST",
-            body: formData,
-          })
-            .then((response) => {
-              loading.style.display = "none";
-              if (response.ok) {
-                sentMessage.style.display = "block";
-                form.reset();
-              } else {
-                errorMessage.style.display = "block";
-                errorMessage.textContent = "Submission failed. Please try again.";
-              }
+            fetch("/", {
+              method: "POST",
+              body: formData,
             })
-            .catch(() => {
-              loading.style.display = "none";
-              errorMessage.style.display = "block";
-              errorMessage.textContent = "Network error. Please try again later.";
-            });
+              .then((response) => {
+                loading.style.display = "none";
+                if (response.ok) {
+                  sentMessage.style.display = "block";
+                  form.reset();
+                } else {
+                  errorMessage.style.display = "block";
+                  errorMessage.textContent = "Submission failed. Please try again.";
+                }
+              })
+              .catch(() => {
+                loading.style.display = "none";
+                errorMessage.style.display = "block";
+                errorMessage.textContent = "Network error. Please try again later.";
+              });
+          });
         });
-      });
     </script>
   </body>
 </html>
